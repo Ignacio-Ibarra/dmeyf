@@ -26,9 +26,9 @@ dtrain[ , clase_ternaria := NULL ]  #elimino la clase_ternaria, ya no la necesit
 dtrain  <- na.roughfix( dtrain )
 
 #cargo los datos donde aplico el modelo
-# dapply  <- fread("./datasetsOri/paquete_premium_202011_ext-17092021.csv", stringsAsFactors= TRUE)
-# dapply[ , clase_ternaria := NULL ]  #Elimino esta columna que esta toda en NA
-# dapply  <- na.roughfix( dapply )
+dapply  <- fread("./datasets/paquete_premium_202011_ext-17092021.csv", stringsAsFactors= TRUE)
+dapply[ , clase_ternaria := NULL ]  #Elimino esta columna que esta toda en NA
+dapply  <- na.roughfix( dapply )
 
 #genero el modelo de Random Forest con la libreria ranger
 param  <- list( "num.trees"=      500,  #cantidad de arboles
@@ -45,8 +45,18 @@ modelo  <- ranger( formula= "clase_binaria ~ .",
                    num.trees=     param$num.trees,
                    mtry=          param$mtry,
                    min.node.size= param$min.node.size,
-                   max.depth=     param$max.depth
+                   max.depth=     param$max.depth, 
+                   importance="impurity",
                  )
+
+require("ggplot2")
+vals <- modelo$variable.importance
+var <- names(modelo$variable.importance)
+df <- data.frame(var,vals, row.names = NULL)
+df <- df[order(-df$vals),]
+
+
+
 
 #prediccion  <- predict( modelo, dapply )
 
