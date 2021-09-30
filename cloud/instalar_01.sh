@@ -568,3 +568,9 @@ sudo systemctl enable /etc/systemd/system/halfswap.service
 sudo systemctl daemon-reload
 
 #------------------------------------------------------------------------------
+
+mkdir -p  sh
+mkdir -p  bin
+mkdir -p  R
+mkdir -p  C
+
